@@ -11,7 +11,7 @@ namespace API.Interfaces
         Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams);
         Task<Member?> GetMemberByIdAsync(string id);
         Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId);
-        Task<Member> GetMemberForUpdate(string id);
+        Task<Member?> GetMemberForUpdate(string id);
 
     }
 }
