@@ -25,7 +25,7 @@ export class MemberMessages implements OnInit, OnDestroy {
   constructor() {
     effect(() => {
       const currentMessages = this.messageService.messageThread();
-      if (currentMessages.length > 0){
+      if (currentMessages.length > 0) {
         this.scrollToBottom();
       }
     })
@@ -41,18 +41,23 @@ export class MemberMessages implements OnInit, OnDestroy {
     })
   }
 
-  sendMessage(){
+  sendMessage() {
     const recipientId = this.memberService.member()?.id;
-    if (!recipientId) return;
-    this.messageService.sendMessage(recipientId, this.messageContent)?.then(() => {
-      this.messageContent = '';
-    })
+
+    if (!recipientId || !this.messageContent.trim()) return;
+
+    const content = this.messageContent;
+
+    this.messageContent = '';
+
+    this.messageService.sendMessage(recipientId, content);
   }
 
+
   scrollToBottom() {
-    setTimeout (() => {
-      if (this.messageEndRef){
-        this.messageEndRef.nativeElement.scrollIntoView({behavior: 'smooth'});
+    setTimeout(() => {
+      if (this.messageEndRef) {
+        this.messageEndRef.nativeElement.scrollIntoView({ behavior: 'smooth' });
       }
     })
   }
