@@ -17,6 +17,7 @@ namespace API.Data
             return await context.Members
                 .Include(x => x.User)
                 .Include(x => x.Photos)
+                .IgnoreQueryFilters()
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
@@ -26,7 +27,7 @@ namespace API.Data
 
             query = query.Where(x => x.Id != memberParams.CurrentMemberId);
 
-            if(memberParams.Gender != null)
+            if (memberParams.Gender != null)
             {
                 query = query.Where(x => x.Gender == memberParams.Gender);
             }
@@ -45,12 +46,20 @@ namespace API.Data
             return await PaginationHelper.CreateAsync(query, memberParams.PageNumber, memberParams.PageSize);
         }
 
-        public async Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId)
+        public async Task<IEnumerable<Photo>> GetPhotosForMemberAsync(
+            string userId,
+            bool isCurrentUser)
         {
-            return await context.Members
-                .Where(x => x.Id == memberId)
-                .SelectMany(x => x.Photos)
-                .ToListAsync();
+            var query = context.Members
+                .Where(x => x.User.Id == userId)
+                .SelectMany(x => x.Photos);
+
+            if (isCurrentUser)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            return await query.ToListAsync();
         }
 
         public void Update(Member member)

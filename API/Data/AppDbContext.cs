@@ -20,6 +20,9 @@ namespace API.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Photo>()
+                .HasQueryFilter(x => x.IsApproved);
+
             modelBuilder.Entity<IdentityRole>()
                 .HasData(
                     new IdentityRole{Id = "member-id", ConcurrencyStamp = "a" , Name = "Member", NormalizedName = "MEMBER"},
