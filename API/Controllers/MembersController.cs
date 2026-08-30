@@ -85,9 +85,9 @@ namespace API.Controllers
             {
                 Url = result.SecureUrl.AbsoluteUri,
                 PublicId = result.PublicId,
-                MemberId = User.GetMemberId()
+                MemberId = User.GetMemberId(),
+                IsApproved = true
             };
-
             member.Photos.Add(photo);
 
             if (await uow.Complete()) return photo;
